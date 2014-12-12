@@ -48,97 +48,66 @@ namespace GildedRose.Console
 
         public void UpdateQuality()
         {
-            for (var i = 0; i < _items.Count; i++)
+            foreach (var item in _items)
             {
-                if (_items[i].Name != "Aged Brie" && _items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
+                if (item.IsLegendary()) continue;
+
+                if (item.IsStandard())
                 {
-                    if (_items[i].Quality > 0)
-                    {
-                        if (_items[i].Name != "Sulfuras, Hand of Ragnaros")
-                        {
-                            _items[i].Quality = _items[i].Quality - 1;
-                        }
-                    }
+                    item.ReduceItemQualityByOne();
                 }
                 else
                 {
-                    if (_items[i].Quality < 50)
+                    item.IncreaseItemQualityByOne();
+
+                    UpdateItemQualityForBackstagePass(item);
+                }
+
+                ItemQualityUpdateByAge(item);
+            }
+        }
+
+        private static void UpdateItemQualityForBackstagePass(Item item)
+        {
+            if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            {
+                if (item.SellIn < 11)
+                {
+                    if (item.Quality < 50)
                     {
-                        _items[i].Quality = _items[i].Quality + 1;
-
-                        if (_items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (_items[i].SellIn < 11)
-                            {
-                                if (_items[i].Quality < 50)
-                                {
-                                    _items[i].Quality = _items[i].Quality + 1;
-                                }
-                            }
-
-                            if (_items[i].SellIn < 6)
-                            {
-                                if (_items[i].Quality < 50)
-                                {
-                                    _items[i].Quality = _items[i].Quality + 1;
-                                }
-                            }
-                        }
+                        item.Quality = item.Quality + 1;
                     }
                 }
 
-                if (_items[i].Name != "Sulfuras, Hand of Ragnaros")
+                if (item.SellIn < 6)
                 {
-                    _items[i].SellIn = _items[i].SellIn - 1;
-                }
-
-                if (_items[i].SellIn < 0)
-                {
-                    if (_items[i].Name != "Aged Brie")
+                    if (item.Quality < 50)
                     {
-                        if (_items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                        {
-                            if (_items[i].Quality > 0)
-                            {
-                                if (_items[i].Name != "Sulfuras, Hand of Ragnaros")
-                                {
-                                    _items[i].Quality = _items[i].Quality - 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            _items[i].Quality = _items[i].Quality - _items[i].Quality;
-                        }
-                    }
-                    else
-                    {
-                        if (_items[i].Quality < 50)
-                        {
-                            _items[i].Quality = _items[i].Quality + 1;
-                        }
+                        item.Quality = item.Quality + 1;
                     }
                 }
             }
         }
 
-    }
-
-    public class Item
-    {
-        public string Name { get; set; }
-
-        public int SellIn { get; set; }
-
-        public int Quality { get; set; }
-    }
-
-    public static class ItemExtension
-    {
-        public static String Stringify(this Item item)
+        private static void ItemQualityUpdateByAge(Item item)
         {
-            return item.Name + " " + item.SellIn + " " + item.Quality;
+            item.SellIn--;
+
+            if (item.IsExpired())
+            {
+                switch (item.Name)
+                {
+                    case "Aged Brie":
+                        item.IncreaseItemQualityByOne();
+                        break;
+                    case "Backstage passes to a TAFKAL80ETC concert":
+                        item.Quality = 0;
+                        break;
+                    default:
+                        item.ReduceItemQualityByOne();
+                        break;
+                }
+            }
         }
     }
-
 }
