@@ -50,63 +50,7 @@ namespace GildedRose.Console
         {
             foreach (var item in _items)
             {
-                if (item.IsLegendary()) continue;
-
-                if (item.IsStandard())
-                {
-                    item.ReduceItemQualityByOne();
-                }
-                else
-                {
-                    item.IncreaseItemQualityByOne();
-
-                    UpdateItemQualityForBackstagePass(item);
-                }
-
-                ItemQualityUpdateByAge(item);
-            }
-        }
-
-        private static void UpdateItemQualityForBackstagePass(Item item)
-        {
-            if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
-            {
-                if (item.SellIn < 11)
-                {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality = item.Quality + 1;
-                    }
-                }
-
-                if (item.SellIn < 6)
-                {
-                    if (item.Quality < 50)
-                    {
-                        item.Quality = item.Quality + 1;
-                    }
-                }
-            }
-        }
-
-        private static void ItemQualityUpdateByAge(Item item)
-        {
-            item.SellIn--;
-
-            if (item.IsExpired())
-            {
-                switch (item.Name)
-                {
-                    case "Aged Brie":
-                        item.IncreaseItemQualityByOne();
-                        break;
-                    case "Backstage passes to a TAFKAL80ETC concert":
-                        item.Quality = 0;
-                        break;
-                    default:
-                        item.ReduceItemQualityByOne();
-                        break;
-                }
+                item.Update();
             }
         }
     }

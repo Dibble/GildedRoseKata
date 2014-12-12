@@ -48,5 +48,36 @@ namespace GildedRose.Console
                 item.Quality = item.Quality - 1;
             }
         }
+
+        public static String GetItemType(this Item item)
+        {
+            if (item.IsLegendary()) return "Legendary";
+
+            if (item.Name == "Backstage passes to a TAFKAL80ETC concert") return "Backstage pass";
+
+            return item.Name == "Aged Brie" ? "Increasing value" : "Standard";
+        }
+
+        public static void Update(this Item item)
+        {
+            switch (item.GetItemType())
+            {
+                case "Legendary":
+                    new LegendaryItemUpdateStrategy().Update(item);
+                    break;
+
+                case "Backstage pass":
+                    new BackstagePassUpdateStrategy().Update(item);
+                    break;
+
+                case "Increasing value":
+                    new IncreasingValueUpdateStrategy().Update(item);
+                    break;
+
+                default:
+                    new StandardItemStrategy().Update(item);
+                    break;
+            }
+        }
     }
 }
