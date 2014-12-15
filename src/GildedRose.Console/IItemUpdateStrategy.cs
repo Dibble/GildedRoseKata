@@ -2,6 +2,6 @@
 {
     interface IItemUpdateStrategy
     {
-        Item Update(Item item);
+        void Update(Item item);
     }
 }

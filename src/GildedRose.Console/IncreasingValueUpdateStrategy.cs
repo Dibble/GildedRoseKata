@@ -2,7 +2,7 @@
 {
     class IncreasingValueUpdateStrategy : IItemUpdateStrategy
     {
-        public Item Update(Item item)
+        public void Update(Item item)
         {
             item.IncreaseItemQualityByOne();
 
@@ -12,8 +12,6 @@
             {
                 item.IncreaseItemQualityByOne();
             }
-
-            return item;
         }
     }
 }

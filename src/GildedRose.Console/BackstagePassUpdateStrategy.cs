@@ -2,7 +2,7 @@
 {
     class BackstagePassUpdateStrategy : IItemUpdateStrategy
     {
-        public Item Update(Item item)
+        public void Update(Item item)
         {
             item.IncreaseItemQualityByOne();
 
@@ -22,8 +22,6 @@
             {
                 item.Quality = 0;
             }
-
-            return item;
         }
     }
 }

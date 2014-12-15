@@ -2,7 +2,7 @@
 {
     class StandardItemStrategy : IItemUpdateStrategy
     {
-        public Item Update(Item item)
+        public void Update(Item item)
         {
             item.ReduceItemQualityByOne();
 
@@ -12,8 +12,6 @@
             {
                 item.ReduceItemQualityByOne();
             }
-
-            return item;
         }
     }
 }

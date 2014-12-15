@@ -2,9 +2,8 @@
 {
     public class LegendaryItemUpdateStrategy : IItemUpdateStrategy
     {
-        public Item Update(Item item)
+        public void Update(Item item)
         {
-            return item;
         }
     }
 }
